@@ -1,0 +1,21 @@
+digraph G {
+    graph [rankdir=LR, labelloc="t", label="Diagrama de Contexto - GreenMonitor Local", fontsize=18];
+    node [shape=box, style="rounded,filled", fillcolor="#F8F8F8", fontname="Arial"];
+    edge [fontname="Arial", fontsize=10];
+    Sistema [shape=ellipse, fillcolor="#DFF0D8", label="GreenMonitor Local\nSistema local de monitoreo ambiental\ny generación de alertas"];
+    Operador [label="Operador del\ninvernadero"];
+    Sensores [label="Sensores locales"];
+    NASA [label="Fuente meteorológica externa\nNASA POWER / API"];
+    Admin [label="Administrador técnico\nSSH"];
+    Responsable [label="Responsable del\ninvernadero"];
+    Operador -> Sistema [label="consultas, filtros, captura manual"];
+    Sistema -> Operador [label="histórico, estadísticas, alertas"];
+    Sensores -> Sistema [label="mediciones ambientales"];
+    Sistema -> Sensores [label="confirmación"];
+    NASA -> Sistema [label="datos exteriores"];
+    Sistema -> NASA [label="solicitud por fecha/ubicación"];
+    Admin -> Sistema [label="configuración SSH"];
+    Sistema -> Admin [label="estado, logs, respaldo"];
+    Responsable -> Sistema [label="criterios operativos"];
+    Sistema -> Responsable [label="alertas y recomendaciones"];
+}

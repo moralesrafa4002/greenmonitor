@@ -1,0 +1,43 @@
+flowchart TB
+    Operador[Operador]
+    Sensores[Sensores locales]
+    Fuente[Fuente externa]
+    Admin[Administrador SSH]
+    Responsable[Responsable]
+
+    P1((1.0 Capturar\nregistros ambientales))
+    P2((2.0 Administrar\nbase de datos))
+    P3((3.0 Evaluar reglas\nde negocio))
+    P4((4.0 Consultar\nhistórico))
+    P5((5.0 Generar\nestadísticas))
+    P6((6.0 Administrar\nacceso local/SSH))
+
+    D1[(D1 Zonas)]
+    D2[(D2 Sensores)]
+    D3[(D3 Registros ambientales)]
+    D4[(D4 Reglas de negocio)]
+    D5[(D5 Alertas)]
+    D6[(D6 Usuarios y bitácora)]
+
+    Sensores -->|mediciones| P1
+    Fuente -->|datos exteriores| P1
+    Operador -->|captura manual| P1
+    P1 -->|registro validado| P2
+    P2 --> D1
+    P2 --> D2
+    P2 --> D3
+    P2 --> D4
+    P2 --> D5
+    P3 -->|consulta registros| D3
+    P3 -->|consulta reglas| D4
+    P3 -->|alertas generadas| D5
+    Operador -->|filtros y consultas| P4
+    P4 -->|lee histórico| D3
+    P4 -->|resultados| Operador
+    P5 -->|lee registros| D3
+    P5 -->|reportes| Operador
+    Responsable -->|criterios| P3
+    P3 -->|alertas/recomendaciones| Responsable
+    Admin -->|comandos SSH| P6
+    P6 --> D6
+    P6 -->|estado/logs| Admin

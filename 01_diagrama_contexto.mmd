@@ -1,0 +1,102 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS zona_invernadero (
+    id_zona INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL UNIQUE,
+    tipo_zona TEXT NOT NULL CHECK (tipo_zona IN ('INTERIOR','EXTERIOR')),
+    descripcion TEXT,
+    ubicacion_referencia TEXT,
+    activa INTEGER NOT NULL DEFAULT 1,
+    fecha_creacion TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS sensor (
+    id_sensor INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_zona INTEGER NOT NULL,
+    codigo_sensor TEXT NOT NULL UNIQUE,
+    tipo_sensor TEXT NOT NULL,
+    unidad_medida TEXT NOT NULL,
+    descripcion TEXT,
+    activo INTEGER NOT NULL DEFAULT 1,
+    fecha_instalacion TEXT,
+    FOREIGN KEY (id_zona) REFERENCES zona_invernadero(id_zona)
+);
+
+CREATE TABLE IF NOT EXISTS fuente_datos (
+    id_fuente INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre_fuente TEXT NOT NULL UNIQUE,
+    tipo_fuente TEXT NOT NULL,
+    url_referencia TEXT,
+    descripcion TEXT,
+    activa INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS regla_negocio (
+    id_regla INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre_regla TEXT NOT NULL UNIQUE,
+    descripcion TEXT NOT NULL,
+    variable_evaluada TEXT NOT NULL,
+    operador TEXT NOT NULL,
+    valor_umbral REAL,
+    unidad TEXT,
+    severidad TEXT NOT NULL,
+    mensaje_alerta TEXT NOT NULL,
+    activa INTEGER NOT NULL DEFAULT 1,
+    fecha_creacion TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS registro_ambiental (
+    id_registro INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_zona INTEGER NOT NULL,
+    id_sensor INTEGER,
+    id_fuente INTEGER NOT NULL,
+    fecha_hora TEXT NOT NULL,
+    temperatura_c REAL,
+    humedad_relativa_pct REAL CHECK (humedad_relativa_pct IS NULL OR humedad_relativa_pct BETWEEN 0 AND 100),
+    humedad_suelo_pct REAL CHECK (humedad_suelo_pct IS NULL OR humedad_suelo_pct BETWEEN 0 AND 100),
+    radiacion_solar_wm2 REAL,
+    indice_uv REAL CHECK (indice_uv IS NULL OR indice_uv >= 0),
+    estado_ventilacion TEXT NOT NULL DEFAULT 'NO_APLICA',
+    observaciones TEXT,
+    fecha_registro TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_zona) REFERENCES zona_invernadero(id_zona),
+    FOREIGN KEY (id_sensor) REFERENCES sensor(id_sensor),
+    FOREIGN KEY (id_fuente) REFERENCES fuente_datos(id_fuente)
+);
+
+CREATE TABLE IF NOT EXISTS alerta (
+    id_alerta INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_registro INTEGER NOT NULL,
+    id_regla INTEGER NOT NULL,
+    fecha_hora_alerta TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    severidad TEXT NOT NULL,
+    mensaje TEXT NOT NULL,
+    estado_alerta TEXT NOT NULL DEFAULT 'ACTIVA',
+    accion_recomendada TEXT,
+    fecha_atencion TEXT,
+    FOREIGN KEY (id_registro) REFERENCES registro_ambiental(id_registro) ON DELETE CASCADE,
+    FOREIGN KEY (id_regla) REFERENCES regla_negocio(id_regla)
+);
+
+CREATE TABLE IF NOT EXISTS usuario_sistema (
+    id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    rol TEXT NOT NULL DEFAULT 'CONSULTA',
+    usuario_login TEXT NOT NULL UNIQUE,
+    activo INTEGER NOT NULL DEFAULT 1,
+    fecha_creacion TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bitacora_acceso (
+    id_bitacora INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER,
+    fecha_hora TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    accion TEXT NOT NULL,
+    detalle TEXT,
+    ip_origen TEXT,
+    FOREIGN KEY (id_usuario) REFERENCES usuario_sistema(id_usuario)
+);
+
+CREATE INDEX IF NOT EXISTS idx_registro_fecha ON registro_ambiental(fecha_hora);
+CREATE INDEX IF NOT EXISTS idx_registro_zona_fecha ON registro_ambiental(id_zona, fecha_hora);
+CREATE INDEX IF NOT EXISTS idx_alerta_estado ON alerta(estado_alerta);

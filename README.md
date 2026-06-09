@@ -1,2 +1,40 @@
-# greenmonitor
-Sistema local de monitoreo ambiental y generación de alertas para invernaderos. Consiste en diseñar, modelar e implementar un sistema de información local orientado al monitoreo de un hibernadero.
+digraph G {
+    graph [rankdir=LR, labelloc="t", label="DFD Nivel 0 - GreenMonitor Local", fontsize=18];
+    node [fontname="Arial", fontsize=10];
+    edge [fontname="Arial", fontsize=9];
+    Operador [shape=box, label="Operador"];
+    Sensores [shape=box, label="Sensores locales"];
+    Fuente [shape=box, label="Fuente externa"];
+    Admin [shape=box, label="Administrador SSH"];
+    Responsable [shape=box, label="Responsable"];
+    P1 [shape=ellipse, label="1.0 Capturar\nregistros ambientales"];
+    P2 [shape=ellipse, label="2.0 Administrar\nbase de datos"];
+    P3 [shape=ellipse, label="3.0 Evaluar reglas\nde negocio"];
+    P4 [shape=ellipse, label="4.0 Consultar\nhistórico"];
+    P5 [shape=ellipse, label="5.0 Generar\nestadísticas"];
+    P6 [shape=ellipse, label="6.0 Administrar\nacceso local/SSH"];
+    D1 [shape=cylinder, label="D1 Zonas"];
+    D2 [shape=cylinder, label="D2 Sensores"];
+    D3 [shape=cylinder, label="D3 Registros"];
+    D4 [shape=cylinder, label="D4 Reglas"];
+    D5 [shape=cylinder, label="D5 Alertas"];
+    D6 [shape=cylinder, label="D6 Usuarios/Bitácora"];
+    Sensores -> P1 [label="mediciones"];
+    Fuente -> P1 [label="datos exteriores"];
+    Operador -> P1 [label="captura manual"];
+    P1 -> P2 [label="registro validado"];
+    P2 -> D1; P2 -> D2; P2 -> D3; P2 -> D4; P2 -> D5;
+    P3 -> D3 [label="lee"];
+    P3 -> D4 [label="lee"];
+    P3 -> D5 [label="crea"];
+    Operador -> P4 [label="filtros"];
+    P4 -> D3 [label="consulta"];
+    P4 -> Operador [label="resultados"];
+    P5 -> D3 [label="agrega"];
+    P5 -> Operador [label="estadísticas"];
+    Responsable -> P3 [label="criterios"];
+    P3 -> Responsable [label="alertas"];
+    Admin -> P6 [label="SSH"];
+    P6 -> D6;
+    P6 -> Admin [label="logs"];
+}

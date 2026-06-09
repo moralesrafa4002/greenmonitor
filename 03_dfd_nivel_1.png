@@ -1,0 +1,69 @@
+classDiagram
+    class ZonaInvernadero {
+        +int id_zona
+        +String nombre
+        +String tipo_zona
+        +boolean activa
+    }
+    class Sensor {
+        +int id_sensor
+        +String codigo_sensor
+        +String tipo_sensor
+        +String unidad_medida
+        +boolean activo
+    }
+    class FuenteDatos {
+        +int id_fuente
+        +String nombre_fuente
+        +String tipo_fuente
+    }
+    class RegistroAmbiental {
+        +int id_registro
+        +datetime fecha_hora
+        +float temperatura_c
+        +float humedad_relativa_pct
+        +float humedad_suelo_pct
+        +float radiacion_solar_wm2
+        +float indice_uv
+        +String estado_ventilacion
+    }
+    class ReglaNegocio {
+        +int id_regla
+        +String variable_evaluada
+        +String operador
+        +float valor_umbral
+        +String severidad
+        +evaluar(registro)
+    }
+    class Alerta {
+        +int id_alerta
+        +String severidad
+        +String mensaje
+        +String estado_alerta
+    }
+    class ServicioMonitoreo {
+        +guardar_registro(datos)
+        +consultar_registros(filtros)
+        +generar_estadisticas()
+    }
+    class ServicioAlertas {
+        +evaluar_registro(registro)
+        +crear_alerta(registro, regla)
+        +listar_activas()
+    }
+    class RepositorioAmbiental {
+        +insertar_registro(registro)
+        +buscar_registros(filtros)
+        +buscar_alertas_activas()
+    }
+
+    ZonaInvernadero "1" --> "0..*" Sensor
+    ZonaInvernadero "1" --> "0..*" RegistroAmbiental
+    Sensor "1" --> "0..*" RegistroAmbiental
+    FuenteDatos "1" --> "0..*" RegistroAmbiental
+    RegistroAmbiental "1" --> "0..*" Alerta
+    ReglaNegocio "1" --> "0..*" Alerta
+    ServicioMonitoreo --> RepositorioAmbiental
+    ServicioMonitoreo --> ServicioAlertas
+    ServicioAlertas --> ReglaNegocio
+    ServicioAlertas --> Alerta

@@ -1,21 +1,37 @@
-MIT License
+# Referencias
 
-Copyright (c) 2026 رافايل موراليس
+## NASA POWER
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+NASA POWER proporciona servicios de datos meteorológicos y solares mediante APIs que entregan información lista para análisis. En este proyecto se usa como referencia conceptual para datos exteriores como temperatura, humedad y radiación solar.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+- NASA POWER API Overview: https://power.larc.nasa.gov/docs/services/api/
+- NASA POWER Hourly API: https://power.larc.nasa.gov/docs/services/api/temporal/hourly/
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## Scrum
+
+Se tomó como base el enfoque de Scrum para organizar el proyecto en backlog, sprints, entregables incrementales y revisión continua.
+
+- Scrum Guide 2020: https://scrumguides.org/scrum-guide.html
+
+## MySQL
+
+Se usó MySQL como base formal del proyecto porque permite modelar tablas relacionales, llaves primarias, llaves foráneas, restricciones y vistas.
+
+- MySQL Reference Manual — Foreign Key Constraints: https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html
+
+## SQLite
+
+SQLite se utilizó para una versión local ejecutable sin instalar servidor de base de datos. Esto facilita la prueba de la interfaz web en cualquier computadora con Python.
+
+- SQLite Documentation: https://www.sqlite.org/docs.html
+
+## Python
+
+La interfaz local usa módulos estándar de Python para levantar un servidor HTTP y manejar una base de datos SQLite.
+
+- Python Standard Library — http.server: https://docs.python.org/3/library/http.server.html
+- Python Standard Library — sqlite3: https://docs.python.org/3/library/sqlite3.html
+
+## Nota sobre los datos de prueba
+
+Los datos ambientales incluidos son simulados con valores realistas para demostrar el funcionamiento del sistema. No representan mediciones reales de un invernadero específico. Su finalidad es permitir pruebas, consultas, estadísticas y generación de alertas.

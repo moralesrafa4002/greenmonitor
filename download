@@ -1,0 +1,76 @@
+# Fase 7 — Despliegue local y administración por SSH
+
+## Objetivo
+
+Explicar cómo instalar el sistema en una computadora servidor dentro de una red interna y permitir que otros equipos consulten la interfaz web local.
+
+## Escenario propuesto
+
+Una computadora del invernadero funciona como servidor local. En esa computadora se ejecuta la aplicación web y la base de datos. Otros equipos conectados a la misma red pueden entrar desde el navegador usando la dirección IP del servidor.
+
+## Ejecución local en servidor
+
+En la computadora servidor:
+
+```bash
+python run.py
+```
+
+Por defecto la aplicación escucha en:
+
+```text
+0.0.0.0:8000
+```
+
+Eso permite que otros equipos de la red interna accedan usando:
+
+```text
+http://IP_DEL_SERVIDOR:8000
+```
+
+## Administración por SSH
+
+Desde otro equipo de la red:
+
+```bash
+ssh usuario@IP_DEL_SERVIDOR
+```
+
+Después se puede entrar a la carpeta del proyecto y ejecutar:
+
+```bash
+cd greenmonitor-local-invernadero
+python run.py
+```
+
+## Comandos útiles
+
+Ver IP del servidor en Linux:
+
+```bash
+ip a
+```
+
+Ver IP en Windows:
+
+```powershell
+ipconfig
+```
+
+Probar conexión desde otro equipo:
+
+```bash
+ping IP_DEL_SERVIDOR
+```
+
+## Seguridad básica recomendada
+
+- Usar contraseña segura para el usuario del servidor.
+- Permitir SSH solo en la red interna.
+- No exponer el puerto 8000 a Internet.
+- Hacer respaldos periódicos de la base de datos.
+- Crear usuarios separados para administración y consulta.
+
+## Relación con el proyecto
+
+El requisito indica que el sistema debe ejecutarse localmente en un servidor dentro de una red interna y que las conexiones se administran por SSH. Esta guía documenta cómo se cumpliría ese despliegue.

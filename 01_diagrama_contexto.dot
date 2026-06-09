@@ -1,0 +1,6 @@
+zona,tipo,fecha_hora,temperatura_c,humedad_relativa_pct,humedad_suelo_pct,radiacion_solar_wm2,indice_uv,estado_ventilacion
+Nave 1 - Cultivo principal,INTERIOR,2026-06-08 08:00:00,24.8,67,58,310,2.1,AUTOMATICA
+Nave 1 - Cultivo principal,INTERIOR,2026-06-08 12:00:00,33.7,42,31,870,8.5,ABIERTA
+Nave 2 - Germinación,INTERIOR,2026-06-08 12:00:00,30.2,55,41,650,6.7,AUTOMATICA
+Exterior norte,EXTERIOR,2026-06-08 12:00:00,36.1,38,,910,9.2,NO_APLICA
+Exterior sur,EXTERIOR,2026-06-08 15:00:00,34.9,40,,790,8.9,NO_APLICA

@@ -1,0 +1,45 @@
+tabla,campo,tipo_dato,restriccion,descripcion,observaciones
+zona_invernadero,id_zona,INTEGER/INT,PK,Identificador único de la zona.,Autoincremental.
+zona_invernadero,nombre,VARCHAR/TEXT,UNIQUE NOT NULL,Nombre de la zona.,Ejemplo: Nave 1 - Cultivo principal.
+zona_invernadero,tipo_zona,ENUM/TEXT,NOT NULL,Indica si la zona es interior o exterior.,INTERIOR / EXTERIOR.
+zona_invernadero,descripcion,VARCHAR/TEXT,NULL,Descripción de la zona.,Uso operativo.
+zona_invernadero,ubicacion_referencia,VARCHAR/TEXT,NULL,Referencia física dentro del invernadero.,"Norte, sur, centro, etc."
+sensor,id_sensor,INTEGER/INT,PK,Identificador único del sensor.,Autoincremental.
+sensor,id_zona,INTEGER/INT,FK,Zona donde se ubica el sensor.,Referencia a zona_invernadero.
+sensor,codigo_sensor,VARCHAR/TEXT,UNIQUE NOT NULL,Código interno del sensor.,GM-MULTI-001.
+sensor,tipo_sensor,ENUM/TEXT,NOT NULL,Tipo de sensor o medición.,"MULTIVARIABLE, UV, etc."
+sensor,unidad_medida,VARCHAR/TEXT,NOT NULL,Unidad principal del sensor.,"°C, %, W/m² o varias."
+fuente_datos,id_fuente,INTEGER/INT,PK,Identificador de fuente.,Autoincremental.
+fuente_datos,nombre_fuente,VARCHAR/TEXT,UNIQUE NOT NULL,Nombre del origen de datos.,"Sensor local, NASA POWER."
+fuente_datos,tipo_fuente,ENUM/TEXT,NOT NULL,Tipo de origen.,"SENSOR_LOCAL, API_EXTERNA, etc."
+fuente_datos,url_referencia,VARCHAR/TEXT,NULL,URL de documentación o API.,Para fuentes externas.
+regla_negocio,id_regla,INTEGER/INT,PK,Identificador de la regla.,Autoincremental.
+regla_negocio,nombre_regla,VARCHAR/TEXT,UNIQUE NOT NULL,Nombre corto de la regla.,Temperatura interior excesiva.
+regla_negocio,variable_evaluada,ENUM/TEXT,NOT NULL,Variable que revisa la regla.,"temperatura_c, indice_uv, etc."
+regla_negocio,operador,ENUM/TEXT,NOT NULL,Operador lógico de evaluación.,">, <, =, COMPUESTA."
+regla_negocio,valor_umbral,DECIMAL/REAL,NULL,Valor límite de la regla.,"32.00, 45.00, 8.00."
+regla_negocio,severidad,ENUM/TEXT,NOT NULL,Nivel de importancia.,"BAJA, MEDIA, ALTA, CRITICA."
+registro_ambiental,id_registro,INTEGER/INT,PK,Identificador del registro ambiental.,Autoincremental.
+registro_ambiental,id_zona,INTEGER/INT,FK NOT NULL,Zona de medición.,Referencia a zona_invernadero.
+registro_ambiental,id_sensor,INTEGER/INT,FK NULL,Sensor que produjo el dato.,Puede ser NULL si fue captura manual/API.
+registro_ambiental,id_fuente,INTEGER/INT,FK NOT NULL,Fuente del dato.,"Sensor local, API, simulación."
+registro_ambiental,fecha_hora,DATETIME/TEXT,NOT NULL,Fecha y hora de la medición.,Base para histórico y estadísticas.
+registro_ambiental,temperatura_c,DECIMAL/REAL,NULL,Temperatura en grados Celsius.,Variable de alerta.
+registro_ambiental,humedad_relativa_pct,DECIMAL/REAL,CHECK 0-100,Humedad relativa.,Porcentaje.
+registro_ambiental,humedad_suelo_pct,DECIMAL/REAL,CHECK 0-100,Humedad del suelo.,Porcentaje.
+registro_ambiental,radiacion_solar_wm2,DECIMAL/REAL,NULL,Radiación solar.,W/m².
+registro_ambiental,indice_uv,DECIMAL/REAL,CHECK >= 0,Índice UV.,Variable de alerta.
+registro_ambiental,estado_ventilacion,ENUM/TEXT,NOT NULL,Estado de ventilación.,"ABIERTA, CERRADA, AUTOMATICA, NO_APLICA."
+alerta,id_alerta,INTEGER/INT,PK,Identificador de alerta.,Autoincremental.
+alerta,id_registro,INTEGER/INT,FK NOT NULL,Registro que originó la alerta.,Trazabilidad.
+alerta,id_regla,INTEGER/INT,FK NOT NULL,Regla que se cumplió.,Trazabilidad.
+alerta,fecha_hora_alerta,DATETIME/TEXT,NOT NULL,Fecha de creación de alerta.,Automática.
+alerta,severidad,ENUM/TEXT,NOT NULL,Nivel de alerta.,"BAJA, MEDIA, ALTA, CRITICA."
+alerta,mensaje,VARCHAR/TEXT,NOT NULL,Descripción de la alerta.,Mensaje visible al usuario.
+alerta,estado_alerta,ENUM/TEXT,NOT NULL,Estado de atención.,"ACTIVA, ATENDIDA, DESCARTADA."
+usuario_sistema,id_usuario,INTEGER/INT,PK,Identificador de usuario.,Autoincremental.
+usuario_sistema,nombre,VARCHAR/TEXT,NOT NULL,Nombre del usuario.,"Administrador, operador, consulta."
+usuario_sistema,rol,ENUM/TEXT,NOT NULL,Rol del usuario.,"ADMINISTRADOR, OPERADOR, CONSULTA."
+bitacora_acceso,id_bitacora,INTEGER/INT,PK,Identificador de evento.,Autoincremental.
+bitacora_acceso,id_usuario,INTEGER/INT,FK NULL,Usuario que realizó acción.,Puede ser NULL para evento automático.
+bitacora_acceso,accion,VARCHAR/TEXT,NOT NULL,Acción registrada.,"INSERT_REGISTRO, LOGIN, SSH."

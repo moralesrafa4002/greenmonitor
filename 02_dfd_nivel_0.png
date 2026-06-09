@@ -1,0 +1,96 @@
+erDiagram
+    ZONA_INVERNADERO ||--o{ SENSOR : contiene
+    ZONA_INVERNADERO ||--o{ REGISTRO_AMBIENTAL : registra
+    SENSOR ||--o{ REGISTRO_AMBIENTAL : genera
+    FUENTE_DATOS ||--o{ REGISTRO_AMBIENTAL : provee
+    REGISTRO_AMBIENTAL ||--o{ ALERTA : origina
+    REGLA_NEGOCIO ||--o{ ALERTA : dispara
+    USUARIO_SISTEMA ||--o{ BITACORA_ACCESO : realiza
+    ZONA_INVERNADERO ||--o{ ESTADISTICA_HORARIA : resume
+    ZONA_INVERNADERO ||--o{ ESTADISTICA_DIARIA : resume
+
+    ZONA_INVERNADERO {
+        int id_zona PK
+        string nombre
+        string tipo_zona
+        string descripcion
+        string ubicacion_referencia
+        boolean activa
+    }
+    SENSOR {
+        int id_sensor PK
+        int id_zona FK
+        string codigo_sensor
+        string tipo_sensor
+        string unidad_medida
+        boolean activo
+    }
+    FUENTE_DATOS {
+        int id_fuente PK
+        string nombre_fuente
+        string tipo_fuente
+        string url_referencia
+        string descripcion
+    }
+    REGISTRO_AMBIENTAL {
+        int id_registro PK
+        int id_zona FK
+        int id_sensor FK
+        int id_fuente FK
+        datetime fecha_hora
+        decimal temperatura_c
+        decimal humedad_relativa_pct
+        decimal humedad_suelo_pct
+        decimal radiacion_solar_wm2
+        decimal indice_uv
+        string estado_ventilacion
+    }
+    REGLA_NEGOCIO {
+        int id_regla PK
+        string nombre_regla
+        string variable_evaluada
+        string operador
+        decimal valor_umbral
+        string severidad
+        boolean activa
+    }
+    ALERTA {
+        int id_alerta PK
+        int id_registro FK
+        int id_regla FK
+        datetime fecha_hora_alerta
+        string severidad
+        string mensaje
+        string estado_alerta
+    }
+    USUARIO_SISTEMA {
+        int id_usuario PK
+        string nombre
+        string rol
+        string usuario_login
+        boolean activo
+    }
+    BITACORA_ACCESO {
+        int id_bitacora PK
+        int id_usuario FK
+        datetime fecha_hora
+        string accion
+        string detalle
+    }
+    ESTADISTICA_HORARIA {
+        int id_estadistica_horaria PK
+        int id_zona FK
+        date fecha
+        int hora
+        decimal temperatura_promedio
+        decimal humedad_promedio
+        int total_registros
+    }
+    ESTADISTICA_DIARIA {
+        int id_estadistica_diaria PK
+        int id_zona FK
+        date fecha
+        decimal temperatura_promedio
+        decimal humedad_promedio
+        int total_registros
+    }

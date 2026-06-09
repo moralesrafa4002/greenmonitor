@@ -1,0 +1,18 @@
+USE greenmonitor_db;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS trg_bitacora_registro_ambiental $$
+CREATE TRIGGER trg_bitacora_registro_ambiental
+AFTER INSERT ON registro_ambiental
+FOR EACH ROW
+BEGIN
+    INSERT INTO bitacora_acceso (id_usuario, accion, detalle, ip_origen)
+    VALUES (NULL, 'INSERT_REGISTRO_AMBIENTAL', CONCAT('Se insertó el registro ambiental ID ', NEW.id_registro), 'LOCAL');
+END $$
+
+DELIMITER ;
+
+-- Nota:
+-- La generación completa de alertas se implementa en la capa de aplicación porque algunas reglas son compuestas.
+-- El trigger documenta la trazabilidad de inserción, mientras que la lógica de negocio evalúa condiciones simples y compuestas.

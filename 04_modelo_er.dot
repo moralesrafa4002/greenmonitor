@@ -1,0 +1,18 @@
+flowchart LR
+    Operador[Operador del invernadero]
+    Sensores[Sensores locales]
+    NASA[Fuente meteorológica externa\nNASA POWER u otra API]
+    Admin[Administrador técnico\nSSH]
+    Responsable[Responsable del invernadero]
+    Sistema((GreenMonitor Local\nSistema de monitoreo ambiental\ny alertas))
+
+    Operador -->|Registros manuales, filtros, consultas| Sistema
+    Sistema -->|Histórico, alertas, estadísticas| Operador
+    Sensores -->|Temperatura, humedad, radiación, UV, suelo| Sistema
+    Sistema -->|Confirmación de recepción| Sensores
+    NASA -->|Datos exteriores de referencia| Sistema
+    Sistema -->|Solicitud por fecha/ubicación| NASA
+    Admin -->|Configuración y mantenimiento SSH| Sistema
+    Sistema -->|Estado, logs, respaldo| Admin
+    Responsable -->|Reglas y criterios operativos| Sistema
+    Sistema -->|Alertas y recomendaciones| Responsable

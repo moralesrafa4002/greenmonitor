@@ -1,0 +1,32 @@
+digraph G {
+    graph [rankdir=LR, labelloc="t", label="DFD Nivel 1 - Monitoreo y alertas", fontsize=18];
+    node [fontname="Arial", fontsize=10];
+    edge [fontname="Arial", fontsize=9];
+    Entrada [shape=box, label="Medición ambiental"];
+    Salida [shape=box, label="Alertas, histórico\ny estadísticas"];
+    P11 [shape=ellipse, label="1.1 Recibir\nmedición"];
+    P12 [shape=ellipse, label="1.2 Validar\nmedición"];
+    P13 [shape=ellipse, label="1.3 Guardar\nregistro"];
+    P14 [shape=ellipse, label="1.4 Consultar\nreglas activas"];
+    P15 [shape=ellipse, label="1.5 Evaluar\ncondiciones"];
+    P16 [shape=ellipse, label="1.6 Generar\nalerta"];
+    P17 [shape=ellipse, label="1.7 Actualizar\nestadísticas"];
+    D1 [shape=cylinder, label="D1 Zonas"];
+    D2 [shape=cylinder, label="D2 Sensores"];
+    D3 [shape=cylinder, label="D3 Registros"];
+    D4 [shape=cylinder, label="D4 Reglas"];
+    D5 [shape=cylinder, label="D5 Alertas"];
+    D7 [shape=cylinder, label="D7 Estadísticas"];
+    Entrada -> P11 -> P12 -> P13;
+    P12 -> D1 [label="verifica zona"];
+    P12 -> D2 [label="verifica sensor"];
+    P13 -> D3;
+    P13 -> P14 -> D4;
+    D4 -> P15;
+    D3 -> P15;
+    P15 -> P16 [label="condición crítica"];
+    P16 -> D5;
+    P15 -> P17 [label="datos agregables"];
+    P17 -> D7;
+    D5 -> Salida; D3 -> Salida; D7 -> Salida;
+}
