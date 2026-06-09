@@ -1,37 +1,343 @@
-# Referencias
+Referencias
 
-## NASA POWER
+Esta sección reúne las fuentes, herramientas y documentos técnicos utilizados como apoyo para el desarrollo del proyecto **Sistema Local de Monitoreo Ambiental y Generación de Alertas para Invernaderos**. Las referencias se organizaron de acuerdo con su función dentro del proyecto: fuentes de datos ambientales, metodología de trabajo, diseño de base de datos, implementación local, desarrollo web y simulación de datos.
 
-NASA POWER proporciona servicios de datos meteorológicos y solares mediante APIs que entregan información lista para análisis. En este proyecto se usa como referencia conceptual para datos exteriores como temperatura, humedad y radiación solar.
+El objetivo de incluir estas referencias es justificar de dónde se tomaron los criterios técnicos, conceptuales y metodológicos utilizados para construir el sistema, así como explicar la relación de cada fuente con las fases del proyecto.
 
-- NASA POWER API Overview: https://power.larc.nasa.gov/docs/services/api/
-- NASA POWER Hourly API: https://power.larc.nasa.gov/docs/services/api/temporal/hourly/
 
-## Scrum
+NASA POWER
 
-Se tomó como base el enfoque de Scrum para organizar el proyecto en backlog, sprints, entregables incrementales y revisión continua.
+NASA POWER, por sus siglas en inglés **Prediction Of Worldwide Energy Resources**, es una plataforma desarrollada por la NASA que proporciona datos meteorológicos, solares y climatológicos mediante servicios web y APIs. Esta plataforma permite consultar información ambiental de distintas ubicaciones geográficas, como temperatura, humedad, radiación solar, velocidad del viento y otros parámetros útiles para análisis energéticos, agrícolas y ambientales.
 
-- Scrum Guide 2020: https://scrumguides.org/scrum-guide.html
+En este proyecto, NASA POWER se tomó como **referencia conceptual** para representar la posible obtención de datos exteriores del invernadero. Aunque los datos incluidos en el sistema son simulados para fines académicos, la estructura del proyecto considera que una fuente externa como NASA POWER podría alimentar la base de datos con registros meteorológicos reales.
 
-## MySQL
+Los datos de NASA POWER son relevantes para este sistema porque el monitoreo de un invernadero no depende únicamente de las condiciones internas, sino también de las condiciones exteriores. Por ejemplo, una temperatura exterior elevada, un índice UV alto o una radiación solar intensa pueden afectar directamente la temperatura interior, el estrés hídrico de las plantas y la necesidad de ventilación o sombreado.
 
-Se usó MySQL como base formal del proyecto porque permite modelar tablas relacionales, llaves primarias, llaves foráneas, restricciones y vistas.
+Dentro del sistema, esta referencia se relaciona principalmente con la tabla `fuente_datos`, donde se puede registrar si un dato proviene de un sensor interno, una carga manual o una fuente externa. También se relaciona con la tabla `registro_ambiental`, ya que ahí se almacenan variables como temperatura, humedad relativa, radiación solar e índice UV.
 
-- MySQL Reference Manual — Foreign Key Constraints: https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html
+En el proyecto, NASA POWER se utiliza como base para justificar los siguientes elementos:
 
-## SQLite
+* Uso de datos meteorológicos exteriores.
+* Posibilidad de conexión futura con APIs.
+* Registro de radiación solar e índice UV.
+* Consulta de información ambiental por fecha y ubicación.
+* Relación entre datos externos y alertas del invernadero.
+* Diseño de una fuente de datos externa dentro del modelo de base de datos.
 
-SQLite se utilizó para una versión local ejecutable sin instalar servidor de base de datos. Esto facilita la prueba de la interfaz web en cualquier computadora con Python.
+Referencias consultadas:
 
-- SQLite Documentation: https://www.sqlite.org/docs.html
+ NASA POWER API Overview: https://power.larc.nasa.gov/docs/services/api/
+ NASA POWER Hourly API: https://power.larc.nasa.gov/docs/services/api/temporal/hourly/
 
-## Python
 
-La interfaz local usa módulos estándar de Python para levantar un servidor HTTP y manejar una base de datos SQLite.
+Scrum
 
-- Python Standard Library — http.server: https://docs.python.org/3/library/http.server.html
-- Python Standard Library — sqlite3: https://docs.python.org/3/library/sqlite3.html
+Scrum es un marco de trabajo ágil utilizado para organizar proyectos en ciclos cortos de desarrollo llamados **sprints**. Este enfoque permite dividir un proyecto grande en entregas más pequeñas, revisables y mejorables. En lugar de desarrollar todo el sistema de una sola vez, Scrum permite planear, construir, revisar y ajustar el producto de forma incremental.
 
-## Nota sobre los datos de prueba
+En este proyecto se tomó Scrum como referencia porque la actividad solicita trabajar mediante **backlog, historias de usuario, tareas por sprint y evidencias de avance incremental**. Por esta razón, la documentación del proyecto se dividió por fases, simulando un proceso progresivo de desarrollo.
 
-Los datos ambientales incluidos son simulados con valores realistas para demostrar el funcionamiento del sistema. No representan mediciones reales de un invernadero específico. Su finalidad es permitir pruebas, consultas, estadísticas y generación de alertas.
+La metodología Scrum se aplicó de la siguiente manera:
+
+1. **Product Backlog:**
+   Se definieron las funcionalidades principales que el sistema debía cumplir, como registrar datos ambientales, consultar registros históricos, generar alertas, mostrar estadísticas y administrar zonas del invernadero.
+
+2. **Historias de usuario:**
+   Se redactaron necesidades desde la perspectiva del usuario. Por ejemplo:
+   “Como encargado del invernadero, quiero consultar alertas activas para tomar decisiones rápidas ante condiciones ambientales críticas”.
+
+3. **Sprints:**
+   El desarrollo se organizó en etapas. Cada sprint representa una parte del avance del proyecto, como análisis, modelado, creación de base de datos, implementación de interfaz y pruebas.
+
+4. **Entregables incrementales:**
+   Cada fase genera productos concretos, como diagramas, diccionarios, scripts SQL, interfaz web y documentación.
+
+5. **Revisión y mejora continua:**
+   La estructura del repositorio permite revisar cada fase por separado y mejorar el sistema de manera ordenada.
+
+Scrum fue útil en este proyecto porque ayudó a mantener una organización clara del trabajo y permitió dividir el sistema en partes comprensibles. Esto facilita que el proyecto pueda ser evaluado no solo como un producto final, sino también como un proceso de análisis, diseño, implementación y prueba.
+
+Referencia consultada: Scrum Guide 2020: https://scrumguides.org/scrum-guide.html
+
+
+
+MySQL
+
+MySQL es un sistema gestor de bases de datos relacional ampliamente utilizado para almacenar, organizar y consultar información estructurada. En este proyecto se utilizó MySQL como la base de datos formal del sistema, ya que permite representar entidades, relaciones, llaves primarias, llaves foráneas, restricciones, vistas y consultas SQL.
+
+El uso de MySQL se justifica porque el sistema necesita administrar diferentes tipos de información relacionada entre sí. Por ejemplo, un registro ambiental pertenece a una zona del invernadero, puede provenir de un sensor específico y puede generar una o varias alertas. Esta estructura se adapta correctamente a un modelo relacional.
+
+En el proyecto, MySQL se utilizó para diseñar y documentar tablas como:
+
+* `usuario`
+* `zona_invernadero`
+* `sensor`
+* `fuente_datos`
+* `registro_ambiental`
+* `regla_negocio`
+* `alerta`
+
+Cada tabla cumple una función específica dentro del sistema. Por ejemplo, la tabla `registro_ambiental` almacena las mediciones del invernadero, mientras que la tabla `alerta` almacena los avisos generados cuando una condición ambiental supera los límites definidos por las reglas de negocio.
+
+Uno de los elementos más importantes utilizados en MySQL son las **llaves foráneas**, ya que permiten mantener la integridad referencial entre tablas. Por ejemplo, un registro ambiental debe estar asociado a una zona existente, y una alerta debe estar relacionada con un registro ambiental y una regla de negocio.
+
+MySQL también permite crear vistas y consultas que facilitan el análisis de información. En este proyecto se incluyeron consultas para revisar registros históricos, alertas activas y estadísticas básicas por fecha o zona.
+
+MySQL se relaciona directamente con las siguientes partes del proyecto:
+
+* Modelo Entidad-Relación.
+* Diccionario de datos.
+* Creación de tablas.
+* Relaciones entre entidades.
+* Consultas históricas.
+* Generación y almacenamiento de alertas.
+* Normalización de la base de datos.
+
+Referencia consultada: MySQL Reference Manual — Foreign Key Constraints: https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html
+
+
+SQLite
+
+SQLite es un motor de base de datos ligero que permite almacenar información en un archivo local sin necesidad de instalar o configurar un servidor de base de datos. A diferencia de MySQL, SQLite funciona directamente desde la aplicación y resulta muy útil para pruebas locales, prototipos y proyectos académicos que necesitan ejecutarse de forma sencilla.
+
+En este proyecto, SQLite se utilizó como una versión local ejecutable del sistema. Esto permite que la interfaz web pueda funcionar en cualquier computadora que tenga Python instalado, sin que el usuario necesite instalar MySQL, configurar usuarios, crear permisos o levantar un servidor externo.
+
+El uso de SQLite tiene una finalidad práctica: facilitar la demostración del sistema. Mientras que MySQL representa la base formal del proyecto, SQLite permite ejecutar la aplicación web local rápidamente y comprobar que las funciones principales trabajan correctamente.
+
+SQLite se utiliza para:
+
+* Crear una base de datos local.
+* Insertar datos de prueba.
+* Consultar registros ambientales.
+* Mostrar alertas activas.
+* Calcular estadísticas básicas.
+* Probar la interfaz web sin configuración compleja.
+
+Esta decisión permite que el proyecto sea más accesible y fácil de ejecutar. Además, mantiene la coherencia con el objetivo de que el sistema funcione de manera local dentro de una computadora o red interna.
+
+Referencia consultada:
+
+* SQLite Documentation: https://www.sqlite.org/docs.html
+
+
+Python
+
+Python es un lenguaje de programación utilizado en este proyecto para construir la aplicación web local y conectar la interfaz con la base de datos SQLite. Se eligió Python porque permite desarrollar aplicaciones funcionales de manera sencilla, clara y rápida, además de contar con módulos estándar para crear servidores HTTP y trabajar con bases de datos locales.
+
+La aplicación utiliza módulos estándar de Python, principalmente:
+
+* `http.server`
+* `sqlite3`
+* `pathlib`
+* `datetime`
+* `urllib`
+
+El módulo `http.server` permite levantar un servidor web local para que el usuario pueda acceder al sistema desde un navegador. Esto hace posible que el proyecto tenga una interfaz local sin necesidad de instalar frameworks externos.
+
+El módulo `sqlite3` permite conectarse con la base de datos local, ejecutar consultas, insertar registros y recuperar información para mostrarla en la interfaz.
+
+Python se utilizó para implementar la lógica principal del sistema, incluyendo:
+
+* Arranque del servidor local.
+* Creación automática de la base de datos SQLite.
+* Inserción de datos iniciales.
+* Consulta de registros ambientales.
+* Evaluación de reglas de negocio.
+* Generación de alertas.
+* Renderizado de páginas HTML.
+* Cálculo de estadísticas básicas.
+
+Un ejemplo simplificado del arranque del sistema es:
+
+python
+from src.greenmonitor.app import run_server
+
+if __name__ == "__main__":
+    run_server(host="0.0.0.0", port=8000)
+
+
+Este código permite iniciar la aplicación y acceder al sistema mediante el navegador en la dirección: http://localhost:8000
+
+
+Python fue importante en el proyecto porque permitió unir la base de datos, las reglas de negocio y la interfaz local en una sola aplicación funcional.
+
+Referencias consultadas:
+
+ Python Standard Library — http.server: https://docs.python.org/3/library/http.server.html
+ Python Standard Library — sqlite3: https://docs.python.org/3/library/sqlite3.html
+
+
+
+Mermaid
+
+Mermaid es una herramienta que permite crear diagramas mediante texto. En este proyecto se utilizó para documentar los modelos solicitados, como el Diagrama de Contexto, DFD Nivel 0, DFD Nivel 1, Modelo Entidad-Relación y Diagrama UML.
+
+El uso de Mermaid permite que los diagramas no solo existan como imágenes, sino también como código editable. Esto es útil porque cualquier integrante del equipo puede modificar el diagrama sin necesidad de usar software especializado.
+
+Mermaid se utilizó para representar:
+
+* Entidades externas.
+* Procesos del sistema.
+* Flujos de información.
+* Almacenes de datos.
+* Entidades del modelo ER.
+* Relaciones entre tablas.
+* Clases principales del sistema.
+
+Por ejemplo, el Modelo Entidad-Relación puede representarse de forma textual con una estructura como la siguiente:
+
+mermaid
+erDiagram
+    ZONA_INVERNADERO ||--o{ SENSOR : contiene
+    ZONA_INVERNADERO ||--o{ REGISTRO_AMBIENTAL : registra
+    SENSOR ||--o{ REGISTRO_AMBIENTAL : genera
+    FUENTE_DATOS ||--o{ REGISTRO_AMBIENTAL : proporciona
+    REGISTRO_AMBIENTAL ||--o{ ALERTA : origina
+    REGLA_NEGOCIO ||--o{ ALERTA : dispara
+
+
+Mermaid se relaciona directamente con la documentación visual del proyecto y ayuda a explicar cómo está diseñado el sistema antes de pasar a la implementación.
+
+Referencia consultada:
+
+ Mermaid Documentation: https://mermaid.js.org/
+
+
+Graphviz DOT
+
+Graphviz DOT es un lenguaje utilizado para describir diagramas mediante texto. En este proyecto se incluyeron versiones en DOT como respaldo editable de los diagramas, además de las versiones en Mermaid.
+
+La finalidad de utilizar DOT es tener una segunda forma de representar los diagramas, especialmente útil para generar imágenes de manera automática o modificar la estructura visual de los modelos.
+
+Graphviz puede utilizarse para generar diagramas a partir de archivos `.dot`. Por ejemplo: dot -Tpng modelo_er.dot -o modelo_er.png
+
+
+En este proyecto, DOT se relaciona con:
+
+* Diagramas estructurados.
+* Diagrama de Contexto.
+* DFD Nivel 0.
+* DFD Nivel 1.
+* Modelo ER.
+* Diagrama UML.
+* Generación de imágenes PNG para documentación.
+
+Referencia consultada: Graphviz Documentation: https://graphviz.org/documentation/
+
+
+HTML, CSS y JavaScript
+
+HTML, CSS y JavaScript se utilizaron para construir la interfaz web local del sistema. Estas tecnologías permiten que el usuario pueda interactuar con el sistema desde un navegador.
+
+HTML se utilizó para estructurar las páginas, formularios, tablas y secciones del dashboard. CSS se utilizó para mejorar la presentación visual, dando formato a tarjetas, botones, tablas, colores, separaciones y diseño general. JavaScript se utilizó para agregar pequeñas interacciones en la interfaz.
+
+La interfaz web permite:
+
+* Consultar registros ambientales.
+* Visualizar alertas activas.
+* Filtrar información por zona.
+* Filtrar información por fecha.
+* Agregar nuevos registros ambientales.
+* Revisar estadísticas básicas.
+* Navegar entre secciones del sistema.
+
+Estas tecnologías fueron seleccionadas porque son compatibles con cualquier navegador moderno y permiten construir una interfaz clara sin depender de servicios externos.
+
+Referencias consultadas:
+
+ HTML — MDN Web Docs: https://developer.mozilla.org/en-US/docs/Web/HTML
+ CSS — MDN Web Docs: https://developer.mozilla.org/en-US/docs/Web/CSS
+ JavaScript — MDN Web Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+
+SSH
+
+SSH, o Secure Shell, es un protocolo utilizado para conectarse de forma segura a otra computadora dentro de una red. En este proyecto se menciona SSH porque el sistema debe ejecutarse de forma local en una computadora servidor dentro de una red interna, permitiendo que otros equipos puedan consultar o actualizar información.
+
+El uso de SSH se relaciona con la administración remota del servidor donde se ejecuta la aplicación. Por ejemplo, si el sistema se instala en una computadora del laboratorio o del invernadero, otro equipo autorizado puede conectarse para iniciar, detener o actualizar el sistema.
+
+Ejemplo de conexión SSH: ssh usuario@IP_DEL_SERVIDOR
+
+
+El uso de SSH permite:
+
+* Administrar el servidor local de forma remota.
+* Subir o modificar archivos del sistema.
+* Ejecutar el servidor web local.
+* Revisar errores o registros.
+* Mantener mayor control sobre el entorno de ejecución.
+
+En este proyecto, SSH se considera parte del despliegue local y de la operación dentro de la red interna.
+
+Referencia consultada:
+
+* OpenSSH Documentation: https://www.openssh.com/manual.html
+
+
+Análisis estructurado de sistemas
+
+El análisis estructurado de sistemas es un enfoque utilizado para estudiar, representar y diseñar sistemas de información mediante procesos, flujos de datos, entidades externas y almacenes de información.
+
+En este proyecto se aplicó análisis estructurado mediante los siguientes modelos:
+
+1. **Diagrama de Contexto:**
+   Representa el sistema como un proceso general y muestra su relación con entidades externas, como usuarios, sensores y fuentes meteorológicas.
+
+2. **DFD Nivel 0:**
+   Divide el sistema en procesos principales, como captura de registros, consulta histórica, evaluación de reglas, generación de alertas y visualización de estadísticas.
+
+3. **DFD Nivel 1:**
+   Detalla procesos internos específicos, especialmente la evaluación de reglas de negocio y la generación de alertas.
+
+4. **Diccionario de Datos:**
+   Describe los datos que entran, se almacenan, se procesan y salen del sistema.
+
+5. **Modelo Entidad-Relación:**
+   Representa las entidades principales de la base de datos y sus relaciones.
+
+6. **Diagrama UML:**
+   Representa una vista orientada a objetos del sistema, mostrando clases y responsabilidades principales.
+
+El análisis estructurado permitió transformar un problema real, como el monitoreo ambiental de un invernadero, en un conjunto ordenado de procesos, datos y reglas.
+
+
+
+Nota sobre los datos de prueba
+
+Los datos ambientales incluidos en este proyecto son **simulados con valores realistas** y tienen una finalidad académica. No representan mediciones reales tomadas en un invernadero específico.
+
+Estos datos se crearon para demostrar el funcionamiento del sistema y permitir que la aplicación pueda ejecutarse sin depender de sensores físicos o conexión a internet.
+
+Los datos de prueba permiten validar funciones como:
+
+* Inserción de registros ambientales.
+* Consulta de información histórica.
+* Filtrado por zona.
+* Filtrado por fecha.
+* Cálculo de estadísticas básicas.
+* Evaluación de reglas de negocio.
+* Generación de alertas automáticas.
+* Visualización de condiciones críticas.
+
+Aunque los datos son simulados, fueron diseñados considerando rangos ambientales razonables para un invernadero. Por ejemplo, se incluyeron registros con temperaturas normales, temperaturas elevadas, humedad baja, radiación solar alta e índice UV elevado. Esto permite comprobar que el sistema puede identificar condiciones de riesgo y generar alertas correctamente.
+
+En una implementación real, estos datos podrían sustituirse por información proveniente de sensores instalados dentro del invernadero o por datos externos obtenidos desde APIs meteorológicas como NASA POWER.
+
+
+Nota sobre la finalidad académica del proyecto
+
+Este proyecto fue desarrollado con fines académicos para aplicar conceptos de análisis estructurado, modelado de bases de datos, diseño de sistemas de información, documentación técnica e implementación local.
+
+El sistema no pretende sustituir una plataforma profesional de monitoreo agrícola, pero sí representa una base funcional que puede ampliarse en el futuro. Algunas mejoras posibles serían:
+
+* Conectar sensores físicos reales.
+* Automatizar la consulta de datos desde una API externa.
+* Agregar usuarios con autenticación.
+* Implementar reportes descargables.
+* Integrar gráficas avanzadas.
+* Agregar notificaciones por correo o mensaje.
+* Crear un panel administrativo más completo.
+* Implementar despliegue en un servidor dedicado.
+* Agregar respaldo automático de la base de datos.
+
+De esta manera, el proyecto demuestra no solo el diseño de un sistema, sino también una posible ruta de crecimiento para convertirlo en una solución más completa.
+
